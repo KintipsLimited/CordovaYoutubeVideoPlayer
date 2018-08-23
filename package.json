@@ -1,0 +1,33 @@
+{
+   "name":"com.bunkerpalace.cordova.YoutubeVideoPlayer",
+   "version":"1.0.5",
+   "description":"Youtube Player",
+   "cordova":{
+      "id":"com.bunkerpalace.cordova.YoutubeVideoPlayer",
+      "platforms":[
+         "android",
+         "ios"
+      ]
+   },
+   "repository":{
+      "type":"git",
+      "url":"https://github.com/KintipsLimited/CordovaYoutubeVideoPlayer"
+   },
+   "keywords":[
+      "ecosystem:cordova",
+      "cordova-android",
+      "cordova-ios"
+   ],
+   "engines":[
+      {
+         "name":"cordova",
+         "version":">=3.3.0"
+      }
+   ],
+   "author":"",
+   "license":"BSD",
+   "bugs":{
+      "url":"https://github.com/KintipsLimited/CordovaYoutubeVideoPlayer/pulls"
+   },
+   "homepage":"https://github.com/KintipsLimited/CordovaYoutubeVideoPlayer"
+}
