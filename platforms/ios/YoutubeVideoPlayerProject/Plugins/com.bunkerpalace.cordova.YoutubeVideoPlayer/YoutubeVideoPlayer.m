@@ -19,7 +19,21 @@
     
     if (videoID != nil) {
         
-        XCDYouTubeVideoPlayerViewController *videoPlayerViewController = [[XCDYouTubeVideoPlayerViewController alloc] initWithVideoIdentifier:videoID];
+        // XCDYouTubeVideoPlayerViewController *videoPlayerViewController = [[XCDYouTubeVideoPlayerViewController alloc] initWithVideoIdentifier:videoID];
+        XCDYouTubeVideoPlayerViewController *videoPlayerViewController;
+        NSArray *arVideoID = [videoID componentsSeparatedByString:@"&"];
+        if ([arVideoID count] > 1) {
+            videoID = [arVideoID objectAtIndex:0];
+            NSString *timePart = [arVideoID objectAtIndex:1];
+            NSString *timePart1 = [timePart stringByReplacingOccurrencesOfString:@"t=" withString:@""];  
+            NSString *timePartFinal = [timePart1 stringByReplacingOccurrencesOfString:@"s" withString:@""];
+            long time = [timePartFinal longLongValue];
+            videoPlayerViewController = [[XCDYouTubeVideoPlayerViewController alloc] initWithVideoIdentifier:videoID];
+            videoPlayerViewController.moviePlayer.initialPlaybackTime = time;
+        } else {
+            videoPlayerViewController = [[XCDYouTubeVideoPlayerViewController alloc] initWithVideoIdentifier:videoID];
+        }
+
         [self.viewController presentMoviePlayerViewControllerAnimated:videoPlayerViewController];
         
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
