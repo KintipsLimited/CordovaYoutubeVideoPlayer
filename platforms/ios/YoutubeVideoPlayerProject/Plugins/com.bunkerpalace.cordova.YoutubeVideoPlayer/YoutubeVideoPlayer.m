@@ -7,6 +7,7 @@
 
 #import "YoutubeVideoPlayer.h"
 #import "XCDYouTubeKit.h"
+#import <AVKit/AVKit.h>
 
 @implementation YoutubeVideoPlayer
 
@@ -20,6 +21,8 @@
     if (videoID != nil) {
         
         // XCDYouTubeVideoPlayerViewController *videoPlayerViewController = [[XCDYouTubeVideoPlayerViewController alloc] initWithVideoIdentifier:videoID];
+        
+        /*
         XCDYouTubeVideoPlayerViewController *videoPlayerViewController;
         NSArray *arVideoID = [videoID componentsSeparatedByString:@"&"];
         if ([arVideoID count] > 1) {
@@ -35,6 +38,9 @@
         }
 
         [self.viewController presentMoviePlayerViewControllerAnimated:videoPlayerViewController];
+        */
+        
+        [self playVideo: videoID];
         
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
         
@@ -45,6 +51,26 @@
     }
     
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void) playVideo:(NSString *) videoId {
+    AVPlayerViewController *playerViewController = [AVPlayerViewController new];
+    [self.viewController presentViewController:playerViewController animated:YES completion:nil];
+
+    __weak AVPlayerViewController *weakPlayerViewController = playerViewController;
+    [[XCDYouTubeClient defaultClient] getVideoWithIdentifier:videoId completionHandler:^(XCDYouTubeVideo * _Nullable video, NSError * _Nullable error) {
+        if (video)
+        {
+            NSDictionary *streamURLs = video.streamURLs;
+            NSURL *streamURL = streamURLs[XCDYouTubeVideoQualityHTTPLiveStreaming] ?: streamURLs[@(XCDYouTubeVideoQualityHD720)] ?: streamURLs[@(XCDYouTubeVideoQualityMedium360)] ?: streamURLs[@(XCDYouTubeVideoQualitySmall240)];
+            weakPlayerViewController.player = [AVPlayer playerWithURL:streamURL];
+            [weakPlayerViewController.player play];
+        }
+        else
+        {
+            [self.viewController dismissViewControllerAnimated:YES completion:nil];
+        }
+    }];
 }
 
 @end
